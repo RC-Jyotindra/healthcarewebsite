@@ -40,7 +40,7 @@ interface WaitlistModalProps {
 export function WaitlistModal({
   open,
   onOpenChange,
-  panelId = "caddee1a-877e-4fa2-92c0-ecda289116be",
+  panelId = "b272b4f2-10ab-47bf-8d13-e6266b130792",
 }: WaitlistModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [schemaFields, setSchemaFields] = useState<PanelField[]>([]);

@@ -6,7 +6,7 @@ export const getPanelSchema = createServerFn({ method: "GET" })
   .validator((data: { panelId?: string } | undefined) => data)
   .handler(async ({ data }): Promise<PanelSchemaResponse> => {
     try {
-      const panelId = data?.panelId || "caddee1a-877e-4fa2-92c0-ecda289116be";
+      const panelId = data?.panelId || "b272b4f2-10ab-47bf-8d13-e6266b130792";
       const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
 
       console.log(`[getPanelSchema] Fetching schema for panelId: ${panelId} with key prefix: ${apiKey.substring(0, 10)}...`);
@@ -79,7 +79,7 @@ export const submitWaitlistForm = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     try {
-      const panelId = data.panelId || "caddee1a-877e-4fa2-92c0-ecda289116be";
+      const panelId = data.panelId || "b272b4f2-10ab-47bf-8d13-e6266b130792";
       const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
 
       const payload = {
