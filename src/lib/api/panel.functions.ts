@@ -7,7 +7,9 @@ export const getPanelSchema = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PanelSchemaResponse> => {
     try {
       const panelId = data?.panelId || "caddee1a-877e-4fa2-92c0-ecda289116be";
-      const apiKey = process.env.PANEL_API_KEY || "pmm_79c1f781_zxGuOqI7HVKHgJHhaeg5tDJEc3HL2uxu";
+      const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
+
+      console.log(`[getPanelSchema] Fetching schema for panelId: ${panelId} with key prefix: ${apiKey.substring(0, 10)}...`);
 
       const response = await fetch(
         `https://surveybuilder.io/api/pmm/ingest/${panelId}/schema`,
@@ -20,13 +22,24 @@ export const getPanelSchema = createServerFn({ method: "GET" })
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Failed to fetch schema: ${errorText}`);
+        console.error(`[getPanelSchema] API Error response (${response.status}):`, errorText);
+        throw new Error(`Failed to fetch schema (${response.status}): ${errorText}`);
       }
 
       const jsonSchema = await response.json();
+      console.log("[getPanelSchema] Received schema json:", JSON.stringify(jsonSchema));
+
       const fields: PanelField[] = [];
-      const customProps = jsonSchema.properties?.properties?.properties || {};
-      const requiredCustomProps = jsonSchema.properties?.properties?.required || [];
+      const customProps =
+        jsonSchema.properties?.properties?.properties ||
+        jsonSchema.properties?.properties ||
+        jsonSchema.properties ||
+        {};
+      const requiredCustomProps =
+        jsonSchema.properties?.properties?.required ||
+        jsonSchema.properties?.required ||
+        jsonSchema.required ||
+        [];
 
       for (const [key, fieldDef] of Object.entries<any>(customProps)) {
         let type: "TEXT" | "NUMBER" | "DATE" | "SINGLE_SELECT" | "MULTI_SELECT" | "TRUE_FALSE" | "EMAIL" = "TEXT";
@@ -42,7 +55,7 @@ export const getPanelSchema = createServerFn({ method: "GET" })
           key,
           label: fieldDef.title || key,
           type,
-          required: requiredCustomProps.includes(key),
+          required: Array.isArray(requiredCustomProps) && requiredCustomProps.includes(key),
           options: fieldDef.enum,
           stepIndex: typeof fieldDef.stepIndex === 'number' ? fieldDef.stepIndex : 0,
         });
@@ -50,7 +63,7 @@ export const getPanelSchema = createServerFn({ method: "GET" })
 
       return { fields };
     } catch (error: any) {
-      console.error("Error in getPanelSchema:", error);
+      console.error("[getPanelSchema] Failed with error:", error);
       return { fields: [] };
     }
   });
@@ -67,7 +80,7 @@ export const submitWaitlistForm = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       const panelId = data.panelId || "caddee1a-877e-4fa2-92c0-ecda289116be";
-      const apiKey = process.env.PANEL_API_KEY || "pmm_79c1f781_zxGuOqI7HVKHgJHhaeg5tDJEc3HL2uxu";
+      const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
 
       const payload = {
         firstName: data.formData.firstName,
