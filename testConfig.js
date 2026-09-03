@@ -1,0 +1,4 @@
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+console.log(defineConfig({
+  nitro: { preset: "vercel" }
+}));
