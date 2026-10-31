@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/tanstack-react-start";
 import { Logo } from "./Logo";
 import { WaitlistModal } from "./WaitlistModal";
 import {
@@ -93,13 +94,22 @@ export function Nav({ light = false }: { light?: boolean }) {
           </NavigationMenu>
         </div>
 
-        <nav className="flex items-center gap-2">
-          <button
-            onClick={() => setModalOpen(true)}
-            className="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink shadow-sm transition hover:bg-white/90 cursor-pointer"
-          >
-            Apply to Network
-          </button>
+        <nav className="flex items-center gap-3">
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium text-white hover:text-white/80 transition-colors cursor-pointer px-3 py-2">
+                Login
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink shadow-sm transition hover:bg-white/90 cursor-pointer">
+                Apply to Network
+              </button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
         </nav>
       </div>
       <WaitlistModal open={modalOpen} onOpenChange={setModalOpen} />
