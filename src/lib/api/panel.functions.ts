@@ -8,11 +8,12 @@ export const getPanelSchema = createServerFn({ method: "GET" })
     try {
       const panelId = data?.panelId || "b272b4f2-10ab-47bf-8d13-e6266b130792";
       const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
+      const baseUrl = process.env.PANEL_API_BASE_URL || "https://curioxm.com";
 
       console.log(`[getPanelSchema] Fetching schema for panelId: ${panelId} with key prefix: ${apiKey.substring(0, 10)}...`);
 
       const response = await fetch(
-        `https://surveybuilder.io/api/pmm/ingest/${panelId}/schema`,
+        `${baseUrl}/api/pmm/ingest/${panelId}/schema`,
         {
           headers: {
             "X-Panel-Api-Key": apiKey.trim(),
@@ -81,6 +82,7 @@ export const submitWaitlistForm = createServerFn({ method: "POST" })
     try {
       const panelId = data.panelId || "b272b4f2-10ab-47bf-8d13-e6266b130792";
       const apiKey = process.env.PANEL_API_KEY || "pmm_fcb6cafe_S7s5AMV2ovdNZQY6eKNeR7068s2lorMe";
+      const baseUrl = process.env.PANEL_API_BASE_URL || "https://curioxm.com";
 
       const payload = {
         firstName: data.formData.firstName,
@@ -92,7 +94,7 @@ export const submitWaitlistForm = createServerFn({ method: "POST" })
       };
 
       const response = await fetch(
-        `https://surveybuilder.io/api/pmm/ingest/${panelId}/submit`,
+        `${baseUrl}/api/pmm/ingest/${panelId}/submit`,
         {
           method: "POST",
           headers: {
